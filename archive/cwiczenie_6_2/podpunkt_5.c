@@ -14,26 +14,25 @@ void Delay(int iHowLongDelay)
 
 int main(){
 	
-	enum LedState{BUTTON_PUSHED0, DEFAULT_STAY};
-	enum LedState eLedState=DEFAULT_STAY;
+	enum LedState{STEP_RIGHT,STAY};
+	enum LedState eLedState=STEP_RIGHT;
 	
 	KeyboardInit();
 	LedInit();
-	char cStepBeforeStateChange = 0;
+
 
 	while(1)
 	{
 		switch(eLedState){
-			case DEFAULT_STAY:
+			case STEP_RIGHT:
+				LedStepRight();
 				if(eKeyboardRead()==BUTTON_0){
-					eLedState=BUTTON_PUSHED0;
+					eLedState=STAY;
 				}
 				break;
-			case BUTTON_PUSHED0:
-				LedStepRight();
-				cStepBeforeStateChange++;
-				if(cStepBeforeStateChange==3){
-				eLedState=DEFAULT_STAY;
+			case STAY:
+				if(eKeyboardRead()==BUTTON_1){
+					eLedState=STEP_RIGHT;
 				}
 				break;
 		}
