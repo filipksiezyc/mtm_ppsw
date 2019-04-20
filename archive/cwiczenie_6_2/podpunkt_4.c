@@ -12,10 +12,14 @@ void Delay(int iHowLongDelay)
 	}
 }
 
-int main(){
+enum LedState{BUTTON_PUSHED0, DEFAULT_STAY};
+enum LedState eLedState;
 
+int main(){
+	
 	enum LedState{BUTTON_PUSHED0, DEFAULT_STAY};
-	enum LedState eLedState = DEFAULT_STAY;
+	enum LedState eLedState=DEFAULT_STAY;
+	
 	KeyboardInit();
 	LedInit();
 	char cStepBeforeStateChange = 0;
@@ -26,15 +30,15 @@ int main(){
 			case DEFAULT_STAY:
 				if(eKeyboardRead()==BUTTON_0){
 					eLedState=BUTTON_PUSHED0;
-					break;
 				}
+				break;
 			case BUTTON_PUSHED0:
 				LedStepRight();
 				cStepBeforeStateChange++;
 				if(cStepBeforeStateChange==3){
 				eLedState=DEFAULT_STAY;
-				break;
 				}
+				break;
 		}
 		Delay(100);
 }
