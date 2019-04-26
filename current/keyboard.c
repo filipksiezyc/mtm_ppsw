@@ -19,10 +19,10 @@ enum eKeyboardState eKeyboardRead(){
 		return BUTTON_0;
 	}
 	else if((IO0PIN&BUTTON2_bm) == 0 ){
-		return BUTTON_1;
+		return BUTTON_2;
 	}
 	else if((IO0PIN&BUTTON1_bm) == 0 ){
-		return BUTTON_2;
+		return BUTTON_1;
 	}
 	else if((IO0PIN&BUTTON3_bm)== 0){
 		return BUTTON_3;

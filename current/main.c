@@ -1,53 +1,61 @@
 #include "led.h"
 #include "keyboard.h"
 
-//Test Git
-
 void Delay(int iHowLongDelay) 
 {
 	int iMiliSecond = 5997; 
 	unsigned int uiCounter; 
 	char cCharIncrementation;
-	
+
 	for(uiCounter=0; uiCounter < (iHowLongDelay*iMiliSecond); uiCounter++) {
 		cCharIncrementation++; 
 	}
 }
 
+
 int main(){
 
-	enum LedState{STATE0, STATE1, STATE2, STATE3, STATE4, STATE5};
-	enum LedState eLedState = STATE0;
-	LedInit();
-	KeyboardInit();
+	enum LedState{STAY,BLINK, STEP_RIGHT};
+	enum LedState eLedState = STAY;
+	unsigned char ucBlinkCounter;
 
-	while(1)
-	{
+	KeyboardInit();
+	LedInit();
+
+
+	while(1){
 		switch(eLedState){
-			case STATE0:
-				LedStepRight();
-				eLedState = STATE1;
+			case STAY:
+				LedOn(0);
+				if (eKeyboardRead()== BUTTON_2){
+					eLedState=BLINK;
+				}
+				else if(eKeyboardRead()==BUTTON_1){
+					eLedState=STEP_RIGHT;
+				}
+					break;
+			case BLINK:
+				if(eKeyboardRead() == BUTTON_0){
+					eLedState=STAY;
+				}
+				else{
+					if(ucBlinkCounter==1){
+						LedOn(0);
+						ucBlinkCounter=0;
+					}
+					else if(ucBlinkCounter==0){
+						LedOn(4);
+						ucBlinkCounter=1;
+					}
+				}
 				break;
-			case STATE1:
-				LedStepRight();
-				eLedState = STATE2;
-				break;
-			case STATE2:
-				LedStepRight();
-				eLedState = STATE3;
-				break;
-			case STATE3:
-				LedStepLeft();
-				eLedState = STATE4;
-				break;
-			case STATE4:
-				LedStepLeft();
-				eLedState = STATE5;
-				break;
-			case STATE5:
-				LedStepLeft();
-				eLedState = STATE0;
-				break;
+			case STEP_RIGHT:
+				if(eKeyboardRead() == BUTTON_0){
+					eLedState=STAY;
+				}
+				else{
+					LedStepRight();
+				}
 		}
 		Delay(100);
 }
