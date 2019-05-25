@@ -6,7 +6,7 @@ void Delay(int iHowLongDelay)
 	int iMiliSecond = 5997; 
 	unsigned int uiCounter; 
 	char cCharIncrementation;
-	
+
 	for(uiCounter=0; uiCounter < (iHowLongDelay*iMiliSecond); uiCounter++) {
 		cCharIncrementation++; 
 	}
@@ -14,7 +14,7 @@ void Delay(int iHowLongDelay)
 
 
 int main(){
-	
+
 	enum LedState{STEP_RIGHT,STEP_LEFT, STAY};
 	enum LedState eLedState = STAY;
 	KeyboardInit();

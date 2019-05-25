@@ -403,6 +403,7 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
+<<<<<<< HEAD
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\timer.c</FilePath>
@@ -411,6 +412,16 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\led.c</FilePath>
+=======
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\keyboard.c</FilePath>
+>>>>>>> 7c28ebc8d8c5f863721090af8c9992f26dd5c3ff
             </File>
           </Files>
         </Group>

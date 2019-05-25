@@ -1,54 +1,61 @@
-#include <LPC21xx.H>
 #include "led.h"
+#include "keyboard.h"
 
-// TIMER
-#define mCOUNTER_ENABLE 0x00000001
-#define mCOUNTER_RESET  0x00000002
+void Delay(int iHowLongDelay) 
+{
+	int iMiliSecond = 5997; 
+	unsigned int uiCounter; 
+	char cCharIncrementation;
 
-// CompareMatch
-#define mINTERRUPT_ON_MR0 0x00000001
-#define mRESET_ON_MR0     0x00000002
-#define mMR0_INTERRUPT    0x00000001
-
-// VIC (Vector Interrupt Controller) VICIntEnable
-#define VIC_TIMER1_CHANNEL_NR 5
-
-// VICVectCntlx Vector Control Registers
-#define mIRQ_SLOT_ENABLE 0x00000020
-
-/**********************************************/
-//(Interrupt Service Routine) of Timer 0 interrupt
-__irq void Timer1IRQHandler(){
-
-	T1IR=mMR0_INTERRUPT; 	// skasowanie flagi przerwania 
-	LedStepRight();		// cos do roboty
-	VICVectAddr=0x00; 	// potwierdzenie wykonania procedury obslugi przerwania
+	for(uiCounter=0; uiCounter < (iHowLongDelay*iMiliSecond); uiCounter++) {
+		cCharIncrementation++; 
+	}
 }
-/**********************************************/
-void Timer1Interrupts_Init(unsigned int uiPeriod){ // microseconds
 
-        // interrupts
 
-	VICIntEnable |= (0x1 << VIC_TIMER1_CHANNEL_NR);            // Enable Timer 0 interrupt channel 
-	VICVectCntl1  = mIRQ_SLOT_ENABLE | VIC_TIMER1_CHANNEL_NR;  // Enable Slot 0 and assign it to Timer 0 interrupt channel
-	VICVectAddr1  =(unsigned long)Timer1IRQHandler; 	   // Set to Slot 0 Address of Interrupt Service Routine 
+int main(){
 
-        // match module
+	enum LedState{STAY,BLINK, STEP_RIGHT};
+	enum LedState eLedState = STAY;
+	unsigned char ucBlinkCounter;
 
-	T1MR0 = 15 * uiPeriod;                 	      // value 
-	T1MCR |= (mINTERRUPT_ON_MR0 | mRESET_ON_MR0); // action 
+	KeyboardInit();
+	LedInit();
 
-        // timer
-
-	T1TCR |=  mCOUNTER_ENABLE; // start 
-
-}
-/**********************************************/
-int main (){
-	unsigned int iMainLoopCtr;
-	Timer1Interrupts_Init(1000);
 
 	while(1){
-	 	iMainLoopCtr++;
-	}
+		switch(eLedState){
+			case STAY:
+				LedOn(0);
+				if (eKeyboardRead()== BUTTON_2){
+					eLedState=BLINK;
+				}
+				else if(eKeyboardRead()==BUTTON_1){
+					eLedState=STEP_RIGHT;
+				}
+					break;
+			case BLINK:
+				if(eKeyboardRead() == BUTTON_0){
+					eLedState=STAY;
+				}
+				else{
+					if(ucBlinkCounter==1){
+						LedOn(0);
+						ucBlinkCounter=0;
+					}
+					else if(ucBlinkCounter==0){
+						LedOn(4);
+						ucBlinkCounter=1;
+					}
+				}
+				break;
+			case STEP_RIGHT:
+				if(eKeyboardRead() == BUTTON_0){
+					eLedState=STAY;
+				}
+				else{
+					LedStepRight();
+				}
+		}
+		Delay(100);
 }
