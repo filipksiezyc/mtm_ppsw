@@ -58,13 +58,11 @@ void Automat(){
 					
 					if(sServo.uiCurrentPosition<sServo.uiDesiredPosition){
 						LedStepLeft();
-						sServo.uiCurrentPosition--;
-						sServo.eState=IN_PROGRESS;
+						sServo.uiCurrentPosition++;
 					}
 					else if(sServo.uiCurrentPosition>sServo.uiDesiredPosition){
 						LedStepRight();
-						sServo.uiCurrentPosition++;
-						sServo.eState=IN_PROGRESS;
+						sServo.uiCurrentPosition--;
 					}
 					else{
 						sServo.eState=IDLE;
