@@ -1,0 +1,16 @@
+void ServoGoTo(unsigned int uiPosition) {
+	sServo.uiDesiredPosition = (uiPosition+12);
+	sServo.eState = IN_PROGRESS;
+	while(sServo.eState != IDLE) {}
+}
+
+
+case CALLIB:
+			if(eReadDetector() == ACTIVE) {
+				sServo.uiCurrentPosition = 0;
+				sServo.uiDesiredPosition = 12;
+				sServo.eState = IDLE;
+			}
+			else {
+				LedStepLeft();
+			}

@@ -47,12 +47,10 @@ void Automat(){
 				break;
 			case IDLE:
 					
-					if(sServo.uiCurrentPosition==sServo.uiDesiredPosition){
-						sServo.eState=IDLE;
-					}
-					else{
+					if(sServo.uiCurrentPosition != sServo.uiDesiredPosition){
 						sServo.eState=IN_PROGRESS;
 					}
+					else{}
 					break;
 		case IN_PROGRESS:
 					
@@ -77,12 +75,16 @@ void ServoInit(unsigned int uiServoFrequency){
 		LedInit();
 		sServo.eState=CALLIB;
 		Timer0Interrupts_Init(uiDelayTime, &Automat);
+		while(sServo.eState != IDLE) {}
 }	
 
 void ServoCallib(){
 	sServo.eState=CALLIB;
+	while(sServo.eState != IDLE) {}
 }	
 
 void ServoGoTo(unsigned int uiPosition){
 	sServo.uiDesiredPosition=uiPosition;
+	sServo.eState = IN_PROGRESS;
+	while(sServo.eState != IDLE) {}
 }	
